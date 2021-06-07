@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({
     title: String,
-    askedBy: {
+    createdBy: {
         userId: mongoose.SchemaTypes.ObjectId,
         name: String
     },
