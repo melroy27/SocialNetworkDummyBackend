@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 const User = require('../models/user')
 const UserData = require('../models/userData')
 
+/**
+ * Method to verify if a user is a new or existing one
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 module.exports.verifyUser = async (req, res, next) => {
     try {
         let email = req.query.id
@@ -27,6 +33,12 @@ module.exports.verifyUser = async (req, res, next) => {
     }
 }
 
+/**
+ * method to create a new user if first time
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 module.exports.createUser = (req, res, next) => {
     const newUser = new User({
         name: req.body.name,
@@ -55,7 +67,9 @@ module.exports.createUser = (req, res, next) => {
     } catch (error) {
         console.log(error)
     }
-
+    /**
+     * Method to create a new userData
+     */
     createUserInfo = async (doc) => {
         try {
             const userData = new UserData({
@@ -73,6 +87,10 @@ module.exports.createUser = (req, res, next) => {
             console.log(error)
         }
     }
+
+    /**
+     * method to get a single user info
+     */
     findTheUser = async (doc) => {
         try {
             let user = await User.findOne({
@@ -86,6 +104,12 @@ module.exports.createUser = (req, res, next) => {
     }
 }
 
+/**
+ * function to get all the users info and only display essential
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 module.exports.allUsers = async (req, res, next) => {
     try {
         let allUsrData = await User.find({}, { "name": 1, "photoUrl": 1, _id: 1 })
@@ -98,6 +122,12 @@ module.exports.allUsers = async (req, res, next) => {
     }
 }
 
+/**
+ * Display all users except the user itself and the ones it follows 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 module.exports.exceptCurrentUser = async (req, res, next) => {
     let tempArr = []
     try {
@@ -118,6 +148,13 @@ module.exports.exceptCurrentUser = async (req, res, next) => {
     }
 }
 
+/**
+ * follow a user
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 module.exports.follow = async (req, res, next) => {
     console.log('The body data is ->', req.body)
     try {
@@ -151,6 +188,13 @@ module.exports.follow = async (req, res, next) => {
         console.log('Seems like an error-> ', error)
     }
 
+    /**
+     * add a new follower into the DB
+     * @param {*} docId 
+     * @param {*} followId 
+     * @param {*} followName 
+     * @returns 
+     */
     async function addFollowers(docId, followId, followName) {
         try {
             let filter = {
@@ -170,6 +214,13 @@ module.exports.follow = async (req, res, next) => {
         }
     }
 }
+
+/**
+ * show the list a user follows
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 module.exports.listOfFollowing = async (req, res, next) => {
     try {
         let userAppInfo = await UserData.findOne({ userId: req.query.id })

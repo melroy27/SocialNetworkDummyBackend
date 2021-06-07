@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 
 const Post = require('../models/post');
 
+/**
+ * method to create a new post
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 module.exports.createPost = async (req, res, next) => {
     const post = new Post({
         title: req.body.title,
@@ -28,6 +34,14 @@ module.exports.createPost = async (req, res, next) => {
         console.log(error);
     }
 }
+
+/**
+ * Function to view a users post
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ * @returns 
+ */
 module.exports.viewUserPosts = async (req, res, next) => {
     let id = req.query.id
     try {
